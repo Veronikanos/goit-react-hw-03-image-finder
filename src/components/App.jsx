@@ -1,5 +1,5 @@
 // import { Loader } from './Loader/Loader';
-// import { Modal } from './Modal/Modal';
+import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
@@ -14,6 +14,7 @@ export class App extends Component {
     results: [],
     error: null,
     page: 1,
+    modalImg: null,
     // isLoading: false
   };
 
@@ -55,19 +56,26 @@ export class App extends Component {
     }));
   };
 
+  getLargeImageURL = url => {
+    this.setState({ modalImg: url });
+  };
+
   render() {
     return (
       <div className={styles.app}>
         <Searchbar onSubmit={this.onSubmitSearch} />
         {this.state.results.length > 0 && (
-          <ImageGallery result={this.state.results} />
+          <ImageGallery
+            result={this.state.results}
+            getUrl={this.getLargeImageURL}
+          />
         )}
         {/* <Loader /> */}
         {this.state.results.length >= 12 && (
           <Button onClick={this.onLoadMoreClick} />
         )}
 
-        {/* <Modal /> */}
+        {this.state.modalImg && <Modal largeImg={this.state.modalImg} />}
       </div>
     );
   }

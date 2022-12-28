@@ -2,12 +2,18 @@ import styles from './ImageGallery.module.css';
 import PropTypes from 'prop-types';
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 
-export const ImageGallery = ({ result }) => {
+export const ImageGallery = ({ result, getUrl }) => {
   console.log(result);
   return (
     <ul className={styles.imageGallery}>
-      {result.map(({ id, webformatURL, tags }) => (
-        <ImageGalleryItem key={id} url={webformatURL} alt={tags} />
+      {result.map(({ id, webformatURL, tags, largeImageURL }) => (
+        <ImageGalleryItem
+          key={id}
+          url={webformatURL}
+          alt={tags}
+          getUrl={getUrl}
+          largeImageURL={largeImageURL}
+        />
       ))}
     </ul>
   );
@@ -19,6 +25,8 @@ ImageGallery.propTypes = {
       id: PropTypes.number.isRequired,
       webformatURL: PropTypes.string.isRequired,
       tags: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
     })
   ).isRequired,
+  getUrl: PropTypes.func,
 };
