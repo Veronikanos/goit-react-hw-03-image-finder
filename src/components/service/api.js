@@ -12,7 +12,7 @@ const galleryApiService = axios.create({
 });
 
 export async function fetchGallery(searchQuery, page = 1) {
-  console.log(searchQuery);
+  // console.log(searchQuery);
   try {
     const { data } = await galleryApiService.get('', {
       params: { q: searchQuery, page },

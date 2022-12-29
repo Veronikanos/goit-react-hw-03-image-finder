@@ -1,4 +1,4 @@
-// import { Loader } from './Loader/Loader';
+import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -15,8 +15,12 @@ export class App extends Component {
     error: null,
     page: 1,
     modalImg: null,
-    // isLoading: false
+    isLoading: false,
   };
+
+  // componentDidMount() {
+
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (
@@ -28,7 +32,7 @@ export class App extends Component {
   }
 
   onFetchImage = async () => {
-    // this.setState({ isLoading: true });
+    this.setState({ isLoading: true });
 
     try {
       const result = await fetchGallery(this.state.query, this.state.page);
@@ -37,13 +41,9 @@ export class App extends Component {
       }));
     } catch (error) {
       this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
     }
-    // finally {
-    //   console.log(this.results);
-    // }
-    // finally {
-    //   this.setState({ isLoading: false });
-    // }
   };
 
   onSubmitSearch = newQuery => {
@@ -60,22 +60,26 @@ export class App extends Component {
     this.setState({ modalImg: url });
   };
 
+  closeModal = () => {
+    console.log('hello');
+    this.setState({ modalImg: null });
+  };
+
   render() {
+    const { isLoading, results, modalImg } = this.state;
     return (
       <div className={styles.app}>
         <Searchbar onSubmit={this.onSubmitSearch} />
-        {this.state.results.length > 0 && (
-          <ImageGallery
-            result={this.state.results}
-            getUrl={this.getLargeImageURL}
-          />
-        )}
-        {/* <Loader /> */}
-        {this.state.results.length >= 12 && (
-          <Button onClick={this.onLoadMoreClick} />
-        )}
+        {isLoading && <Loader />}
 
-        {this.state.modalImg && <Modal largeImg={this.state.modalImg} />}
+        {results.length > 0 ? (
+          <ImageGallery result={results} getUrl={this.getLargeImageURL} />
+        ) : (
+          <h1>NO RES</h1>
+        )}
+        {results.length >= 12 && <Button onClick={this.onLoadMoreClick} />}
+
+        {modalImg && <Modal largeImg={modalImg} onClose={this.closeModal} />}
       </div>
     );
   }

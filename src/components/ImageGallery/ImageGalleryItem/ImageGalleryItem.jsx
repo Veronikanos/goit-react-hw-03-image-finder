@@ -3,11 +3,11 @@ import styles from './ImageGalleryItem.module.css';
 
 export const ImageGalleryItem = ({ url, alt, getUrl, largeImageURL }) => {
   return (
-    <li className={styles.ImageGalleryItem}>
+    <li className={styles.imageGalleryItem}>
       <img
         src={url}
         alt={alt}
-        className={styles.ImageGalleryItemImage}
+        className={styles.imageGalleryItemImage}
         onClick={() => {
           getUrl(largeImageURL);
         }}
