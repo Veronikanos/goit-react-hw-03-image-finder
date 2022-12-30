@@ -1,6 +1,11 @@
-import styles from './Searchbar.module.css';
 import React, { Component } from 'react';
 import { ImSearch } from 'react-icons/im';
+import { BsTrash } from 'react-icons/bs';
+import PropTypes from 'prop-types';
+
+import styles from './Searchbar.module.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export class Searchbar extends Component {
   state = {
@@ -9,17 +14,20 @@ export class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (!this.state.value.trim()) {
-      alert('Enter query!');
-      this.props.handleNoResults();
+    const normalizedQuery = this.state.value.trim().toLowerCase();
+    if (!normalizedQuery) {
+      toast('The query is empty! Try again.');
       return;
     }
-    this.props.onSubmit(this.state.value);
-    this.setState({ value: '' });
+    this.props.onSubmit(normalizedQuery);
   };
 
   handleChange = e => {
-    this.setState({ value: e.target.value.toLowerCase().trim() });
+    this.setState({ value: e.target.value });
+  };
+
+  clearInput = () => {
+    this.setState({ value: '' });
   };
 
   render() {
@@ -35,6 +43,13 @@ export class Searchbar extends Component {
             value={this.state.value}
             onChange={this.handleChange}
           />
+          <button
+            type="button"
+            className={styles.searchFormButton}
+            onClick={this.clearInput}
+          >
+            <BsTrash />
+          </button>
           <button type="submit" className={styles.searchFormButton}>
             <ImSearch />
           </button>
@@ -43,3 +58,7 @@ export class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func,
+};

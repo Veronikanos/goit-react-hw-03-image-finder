@@ -2,18 +2,12 @@ import { Component } from 'react';
 import styles from './Modal.module.css';
 
 export class Modal extends Component {
-  // state = {
-  //   isOpen: false,
-  // };
-
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
-    window.addEventListener('click', this.handleClickOnBackdrop);
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeyDown);
-    window.removeEventListener('click', this.handleClickOnBackdrop);
   }
 
   handleKeyDown = e => {
@@ -24,18 +18,18 @@ export class Modal extends Component {
 
   handleClickOnBackdrop = e => {
     if (e.target === e.currentTarget) {
-      console.log('В бекдроп');
-      // return this.props.onClose();
-    } else {
-      console.log('MIMO');
+      return this.props.onClose();
     }
   };
 
   render() {
     return (
-      <div className={styles.overlay}>
+      <div className={styles.overlay} onClick={this.handleClickOnBackdrop}>
         <div className={styles.modal}>
-          <img src={this.props.largeImg} alt="modal" />
+          <img
+            src={this.props.largeImg.largeImageURL}
+            alt={this.props.largeImg.alt}
+          />
         </div>
       </div>
     );

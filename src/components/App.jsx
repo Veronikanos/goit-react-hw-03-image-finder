@@ -3,24 +3,26 @@ import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
-
-import styles from './App.module.css';
 import { Component } from 'react';
 import { fetchGallery } from './service/api';
+import { NoResults } from './NoResults/NoResults';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import s from './App.module.css';
 
 export class App extends Component {
   state = {
     query: '',
     results: [],
+    totalImages: 0,
     error: null,
     page: 1,
     modalImg: null,
     isLoading: false,
+    isFirstLoading: true,
   };
-
-  // componentDidMount() {
-
-  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (
@@ -29,15 +31,21 @@ export class App extends Component {
     ) {
       this.onFetchImage();
     }
+    if (this.state.isFirstLoading) {
+      this.setState({ isFirstLoading: false });
+    }
   }
 
   onFetchImage = async () => {
     this.setState({ isLoading: true });
-
     try {
-      const result = await fetchGallery(this.state.query, this.state.page);
+      const { images: result, totalImages } = await fetchGallery(
+        this.state.query,
+        this.state.page
+      );
       this.setState(prevState => ({
         results: [...prevState.results, ...result],
+        totalImages,
       }));
     } catch (error) {
       this.setState({ error: error.message });
@@ -47,7 +55,11 @@ export class App extends Component {
   };
 
   onSubmitSearch = newQuery => {
-    this.setState({ query: newQuery, page: 1, results: [] });
+    if (this.state.query === newQuery) {
+      toast('The same query, try again!');
+      return;
+    }
+    this.setState({ query: newQuery, page: 1, results: [], totalImages: 0 });
   };
 
   onLoadMoreClick = () => {
@@ -56,30 +68,38 @@ export class App extends Component {
     }));
   };
 
-  getLargeImageURL = url => {
-    this.setState({ modalImg: url });
+  getLargeImageURL = modalData => {
+    this.setState({ modalImg: modalData });
   };
 
   closeModal = () => {
-    console.log('hello');
     this.setState({ modalImg: null });
   };
 
   render() {
-    const { isLoading, results, modalImg } = this.state;
+    const { isLoading, results, modalImg, isFirstLoading, totalImages, query } =
+      this.state;
     return (
-      <div className={styles.app}>
+      <div className={s.app}>
         <Searchbar onSubmit={this.onSubmitSearch} />
-        {isLoading && <Loader />}
 
         {results.length > 0 ? (
           <ImageGallery result={results} getUrl={this.getLargeImageURL} />
         ) : (
-          <h1>NO RES</h1>
+          <h1>HELLOOO</h1>
         )}
-        {results.length >= 12 && <Button onClick={this.onLoadMoreClick} />}
+
+        {!isFirstLoading && !results.length && !isLoading && (
+          <NoResults query={query} />
+        )}
+
+        {isLoading && <Loader />}
+        {totalImages !== results.length && !isLoading && (
+          <Button onClick={this.onLoadMoreClick} />
+        )}
 
         {modalImg && <Modal largeImg={modalImg} onClose={this.closeModal} />}
+        <ToastContainer />
       </div>
     );
   }

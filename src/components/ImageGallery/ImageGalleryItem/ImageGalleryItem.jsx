@@ -9,7 +9,7 @@ export const ImageGalleryItem = ({ url, alt, getUrl, largeImageURL }) => {
         alt={alt}
         className={styles.imageGalleryItemImage}
         onClick={() => {
-          getUrl(largeImageURL);
+          getUrl({ largeImageURL, alt });
         }}
       />
     </li>
