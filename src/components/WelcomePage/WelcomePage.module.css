@@ -15,7 +15,7 @@ p {
 
 footer {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   max-width: 600px;
   color: rgb(167, 167, 167);
   padding-top: 20px;
