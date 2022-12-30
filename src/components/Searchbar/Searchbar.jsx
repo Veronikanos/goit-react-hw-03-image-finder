@@ -16,7 +16,7 @@ export class Searchbar extends Component {
     e.preventDefault();
     const normalizedQuery = this.state.value.trim().toLowerCase();
     if (!normalizedQuery) {
-      toast('The query is empty! Try again.');
+      toast.warning('The query is empty! Try again.');
       return;
     }
     this.props.onSubmit(normalizedQuery);
@@ -34,15 +34,7 @@ export class Searchbar extends Component {
     return (
       <header className={styles.searchbar}>
         <form onSubmit={this.handleSubmit} className={styles.searchForm}>
-          <input
-            className={styles.searchFormInput}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />
+          {' '}
           <button
             type="button"
             className={styles.searchFormButton}
@@ -53,6 +45,15 @@ export class Searchbar extends Component {
           <button type="submit" className={styles.searchFormButton}>
             <ImSearch />
           </button>
+          <input
+            className={styles.searchFormInput}
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            value={this.state.value}
+            onChange={this.handleChange}
+          />
         </form>
       </header>
     );

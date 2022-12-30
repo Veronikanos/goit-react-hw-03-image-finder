@@ -6,11 +6,10 @@ import { Button } from './Button/Button';
 import { Component } from 'react';
 import { fetchGallery } from './service/api';
 import { NoResults } from './NoResults/NoResults';
+import { WelcomePage } from './WelcomePage/WelcomePage';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-import s from './App.module.css';
 
 export class App extends Component {
   state = {
@@ -56,7 +55,7 @@ export class App extends Component {
 
   onSubmitSearch = newQuery => {
     if (this.state.query === newQuery) {
-      toast('The same query, try again!');
+      toast('The same query, try another one!');
       return;
     }
     this.setState({ query: newQuery, page: 1, results: [], totalImages: 0 });
@@ -80,26 +79,26 @@ export class App extends Component {
     const { isLoading, results, modalImg, isFirstLoading, totalImages, query } =
       this.state;
     return (
-      <div className={s.app}>
+      <div>
         <Searchbar onSubmit={this.onSubmitSearch} />
+        <main>
+          {results.length > 0 && (
+            <ImageGallery result={results} getUrl={this.getLargeImageURL} />
+          )}
 
-        {results.length > 0 ? (
-          <ImageGallery result={results} getUrl={this.getLargeImageURL} />
-        ) : (
-          <h1>HELLOOO</h1>
-        )}
+          {isFirstLoading && <WelcomePage />}
 
-        {!isFirstLoading && !results.length && !isLoading && (
-          <NoResults query={query} />
-        )}
+          {!isFirstLoading && !results.length && !isLoading && (
+            <NoResults query={query} />
+          )}
+          {isLoading && <Loader />}
+          {totalImages !== results.length && !isLoading && (
+            <Button onClick={this.onLoadMoreClick} />
+          )}
 
-        {isLoading && <Loader />}
-        {totalImages !== results.length && !isLoading && (
-          <Button onClick={this.onLoadMoreClick} />
-        )}
-
-        {modalImg && <Modal largeImg={modalImg} onClose={this.closeModal} />}
-        <ToastContainer />
+          {modalImg && <Modal largeImg={modalImg} onClose={this.closeModal} />}
+          <ToastContainer autoClose={3000} />
+        </main>
       </div>
     );
   }
