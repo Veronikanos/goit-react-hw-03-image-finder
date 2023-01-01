@@ -17,7 +17,6 @@ Coded by Tlostiuk Veronika.
 
 #### Preview:
 
-https://user-images.githubusercontent.com/49239848/210172796-af863215-bdf5-491a-b689-324d569d6619.mp4
 
 
 ---
