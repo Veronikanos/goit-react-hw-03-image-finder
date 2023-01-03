@@ -24,7 +24,7 @@ https://user-images.githubusercontent.com/49239848/210173149-d0124bef-ec2d-43c9-
 ### HOW TO RUN THIS PROJECT LOCALLY
 
 Clone this repo:
-`git clone https://veronikanos.github.io/goit-react-hw-01-components/`
+`git clone https://github.com/Veronikanos/goit-react-hw-03-image-finder.git`
 
 In the project directory, you can run:
 
